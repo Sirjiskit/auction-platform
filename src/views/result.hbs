@@ -1,0 +1,106 @@
+<div class="w-full">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-gray-200 pb-3 mb-4">
+        <!-- Title -->
+        <h1 class="text-2xl font-semibold text-gray-800">Bidding Result</h1>
+
+        <!-- Breadcrumb -->
+        <nav class="flex items-center text-sm text-gray-600 whitespace-nowrap overflow-x-auto">
+            <ol class="inline-flex items-center space-x-1 sm:space-x-2">
+                <li>
+                    <a href="/" class="text-gray-500 hover:text-gray-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor">
+                            <g clip-path="url(#clip0_4418_4931)">
+                                <path opacity="0.4"
+                                    d="M20.83 8.01002L14.28 2.77002C13 1.75002 11 1.74002 9.72996 2.76002L3.17996 8.01002C2.23996 8.76002 1.66996 10.26 1.86996 11.44L3.12996 18.98C3.41996 20.67 4.98996 22 6.69996 22H17.3C18.99 22 20.59 20.64 20.88 18.97L22.14 11.43C22.32 10.26 21.75 8.76002 20.83 8.01002Z"
+                                    fill="white" style="fill: var(--fillg);" />
+                                <path
+                                    d="M12 18.75C11.59 18.75 11.25 18.41 11.25 18V15C11.25 14.59 11.59 14.25 12 14.25C12.41 14.25 12.75 14.59 12.75 15V18C12.75 18.41 12.41 18.75 12 18.75Z"
+                                    fill="white" style="fill: var(--fillg);" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_4418_4931">
+                                    <rect width="24" height="24" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <span class="mx-1">/</span>
+                    <a href="/bids" class="text-gray-500 hover:text-gray-700">Bids</a>
+                </li>
+                <li>
+                    <span class="mx-1">/</span>
+                    <span class="text-gray-800 font-medium">Result</span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="p-6 bg-white rounded shadow">
+        <div class="flex justify-between align-middle">
+            <h3 class="text-lg font-semibold mb-4">Autions</h3>
+        </div>
+        <table class="w-full text-sm text-left">
+            <thead class="text-gray-500">
+                <tr>
+                    <th class="py-2">Title</th>
+                    <th>Description</th>
+                    <th>End Time</th>
+                    <th>Total Bids</th>
+                    <th>Winner</th>
+                    <th>Winning Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each list}}
+                <tr class="border-t">
+                    <!-- Auction title with icon -->
+                    <td class="py-2 flex items-center space-x-2">
+                        <div class="h-5 w-5 bg-gray-300 rounded-full"></div>
+                        <span>{{this.title}}</span>
+                    </td>
+
+                    <!-- Description -->
+                    <td class="py-2">
+                        {{this.description}}
+                    </td>
+
+                    <!-- End date -->
+                    <td class="py-2 text-sm text-gray-600">
+                        {{formatDate this.endsAt "YYYY-MM-DD HH:mm"}}
+                    </td>
+
+                    <!-- Total Bids -->
+                    <td class="py-2 text-center">
+                        {{this.totalBids}}
+                    </td>
+                    <td class="py-2">
+                        {{this.winner.name}}
+                    </td>
+                    <!-- Highest Bid -->
+                    <td class="py-2 text-center font-semibold text-yellow-600">
+                        ⭐ {{this.winner.amount}}
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="5" class="py-6 text-center text-gray-500">
+                        <div class="flex flex-col items-center justify-center space-y-2">
+                            <!-- Empty state icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 17v-2a4 4 0 018 0v2m-4-9a4 4 0 100 8 4 4 0 000-8z" />
+                            </svg>
+                            <span>No auctions result available</span>
+                        </div>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+    </div>
+</div>

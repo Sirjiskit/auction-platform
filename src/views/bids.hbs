@@ -1,0 +1,317 @@
+<div class="w-full">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-gray-200 pb-3 mb-4">
+        <!-- Title -->
+        <h1 class="text-2xl font-semibold text-gray-800">Bidding</h1>
+
+        <!-- Breadcrumb -->
+        <nav class="flex items-center text-sm text-gray-600 whitespace-nowrap overflow-x-auto">
+            <ol class="inline-flex items-center space-x-1 sm:space-x-2">
+                <li>
+                    <a href="/" class="text-gray-500 hover:text-gray-700 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor">
+                            <g clip-path="url(#clip0_4418_4931)">
+                                <path opacity="0.4"
+                                    d="M20.83 8.01002L14.28 2.77002C13 1.75002 11 1.74002 9.72996 2.76002L3.17996 8.01002C2.23996 8.76002 1.66996 10.26 1.86996 11.44L3.12996 18.98C3.41996 20.67 4.98996 22 6.69996 22H17.3C18.99 22 20.59 20.64 20.88 18.97L22.14 11.43C22.32 10.26 21.75 8.76002 20.83 8.01002Z"
+                                    fill="white" style="fill: var(--fillg);" />
+                                <path
+                                    d="M12 18.75C11.59 18.75 11.25 18.41 11.25 18V15C11.25 14.59 11.59 14.25 12 14.25C12.41 14.25 12.75 14.59 12.75 15V18C12.75 18.41 12.41 18.75 12 18.75Z"
+                                    fill="white" style="fill: var(--fillg);" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_4418_4931">
+                                    <rect width="24" height="24" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        Home
+                    </a>
+                </li>
+                {{!-- <li>
+                    <span class="mx-1">/</span>
+                    <a href="/autions" class="text-gray-500 hover:text-gray-700">Projects</a>
+                </li> --}}
+                <li>
+                    <span class="mx-1">/</span>
+                    <span class="text-gray-800 font-medium">Bidding</span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+    {{#if list.length}}
+    {{#each list}}
+    <div class="max-w-sm bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+        <!-- Thumbnail -->
+        <img src="{{this.thumbnail}}" alt="{{this.title}}" class="w-full h-48 object-cover">
+
+        <!-- Content -->
+        <div class="p-5">
+            <!-- Title -->
+            <h2 class="text-xl font-bold text-gray-800 truncate">{{this.title}}</h2>
+            <!-- Description -->
+            <p class="text-sm text-gray-600 mt-1 line-clamp-2">{{this.description}}</p>
+
+            <!-- Auction Info -->
+            <div class="mt-4 grid grid-cols-2 gap-2 text-sm">
+                <div class="flex flex-col">
+                    <span class="text-gray-500">Highest Bid</span>
+                    <span class="font-semibold text-green-600 autionAmount" data-autionId="{{this.id}}">₦{{amount
+                        this.highestBid}}</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-gray-500">Total Bids</span>
+                    <span class="font-semibold text-blue-600 autionBids" data-autionId="{{this.id}}">
+                        {{this.totalBids}}</span>
+                </div>
+            </div>
+
+            <!-- Countdown -->
+            <div class="mt-3 flex items-center text-xs text-red-600 font-medium">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Ends in:&nbsp; <span class="countdown" data-endsat="{{this.endsAt}}">{{bidEndIn this.endsAt}}</span>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-5 flex items-center justify-between">
+                <button data-aId="{{this.id}}"
+                    class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-xl hover:bg-blue-700 transition openModal">
+                    Place Bid
+                </button>
+                {{!-- <a href="/auction/{{this.id}}" class="text-sm text-gray-500 hover:text-gray-800 transition">
+                    View Details →
+                </a> --}}
+            </div>
+        </div>
+    </div>
+    {{/each}}
+    {{else}}
+    <div class="flex flex-col items-center justify-center text-gray-500 py-20">
+        <svg class="w-16 h-16 mb-3 text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6m-6 4h6m6-8a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p class="text-lg font-medium">No ongoing auctions at the moment</p>
+        <p class="text-sm">Check back later for new opportunities to bid!</p>
+    </div>
+    {{/if}}
+
+</div>
+<!-- Modal Background (hidden by default) -->
+<form id="bidForm">
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+        <!-- Modal Box -->
+        <div class="bg-white rounded-lg shadow-lg w-11/12 max-w-md p-6 relative">
+
+            <!-- Close Button -->
+            <button id="closeModal" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
+                ✕
+            </button>
+
+            <!-- Title -->
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Bid</h2>
+
+            <div class="w-full" id="result"></div>
+            <!-- Body -->
+            <div class="mb-4">
+                <input type="number" name="amount" id="amount" placeholder="Bidding amount"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <p id="amountError" class="text-red-500 text-xs"></p>
+            </div>
+            <!-- Actions -->
+            <div class="flex justify-end space-x-3">
+                <button id="closeBtn" type="button"
+                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                    Cancel
+                </button>
+                <button id="submitBtn"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center gap-2">
+                    <span id="btnText">Bid</span>
+                    <span id="btnLoader"
+                        class="hidden animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span>
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+</form>
+
+
+<script type="module">
+    import * as yup from "https://cdn.jsdelivr.net/npm/yup@1.3.3/+esm";
+    const modal = document.getElementById("modal");
+    const openModal = document.querySelectorAll(".openModal");
+    const closeModal = document.getElementById("closeModal");
+    const closeBtn = document.getElementById("closeBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    const btnText = document.getElementById("btnText");
+    const btnLoader = document.getElementById("btnLoader");
+    let selectedAutionId;
+    openModal.forEach((el) => {
+        el.addEventListener("click", (e) => {
+            selectedAutionId = e.currentTarget.getAttribute("data-aId");
+            modal.classList.remove("hidden");
+        });
+    });
+
+    closeModal.addEventListener("click", () => {
+        modal.classList.add("hidden");
+    });
+
+    closeBtn.addEventListener("click", () => {
+        modal.classList.add("hidden");
+    });
+
+    var error = "{{error}}";
+    var success = "{{success}}";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        if (error && error != "") modal.classList.remove("hidden");
+        if (success && success != "") modal.classList.remove("hidden");
+
+        // 1️⃣ Initialize countdown for each auction card
+        const countdownEls = document.querySelectorAll(".countdown");
+        countdownEls.forEach((el) => {
+            const endsAt = new Date(el.dataset.endsat).getTime();
+
+            const updateCountdown = () => {
+                const now = Date.now();
+                const diff = endsAt - now;
+
+                if (diff <= 0) {
+                    el.textContent = "Expired";
+                    clearInterval(timer);
+                    return;
+                }
+
+                // Format nicely
+                const seconds = Math.floor(diff / 1000) % 60;
+                const minutes = Math.floor(diff / (1000 * 60)) % 60;
+                const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+                if (days > 0) {
+                    el.textContent = `${days}d ${hours}h`;
+                } else if (hours > 0) {
+                    el.textContent = `${hours}h ${minutes}m`;
+                } else if (minutes > 0) {
+                    el.textContent = `${minutes}m ${seconds}s`;
+                } else {
+                    el.textContent = `${seconds}s`;
+                }
+            };
+
+            updateCountdown(); // initial render
+            const timer = setInterval(updateCountdown, 1000);
+        });
+
+        // 2️⃣ Still listen to socket for auction-end event (server is truth)
+        if (window.socket) {
+            window.socket.on("auction-end", (data) => {
+                const el = document.querySelector(`.countdown[data-endsat][data-id="${data.auctionId}"]`);
+                if (el) {
+                    el.textContent = "Ended";
+                }
+            });
+            window.socket.on("auction-bid", (data) => {
+                const el = document.querySelector(`.autionAmount[data-autionId="${data.auctionId}"]`);
+                const elTotal = document.querySelector(`.autionBids[data-autionId="${data.auctionId}"]`);
+                if (el) {
+                    let amountText = data.amount.toString();
+                    // Check if it already starts with ₦
+                    if (!amountText.trim().startsWith("₦")) {
+                        amountText = "₦" + amountText;
+                    }
+
+                    el.innerHTML = amountText;
+                }
+                if (elTotal) {
+                    elTotal.innerHTML = data.bids;
+                }
+            });
+        }
+
+    });
+    const schema = yup.object().shape({
+        amount: yup
+            .number()
+            .required('Amount is a required field')
+            .positive('Amount must be a positive number')
+            .min(0.01, 'Amount must be greater than 0.01')
+    });
+    // Handle form submit
+    document.querySelector("#bidForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        let formData = {
+            amount: document.getElementById("amount").value.trim(),
+
+        };
+
+        try {
+            await schema.validate(formData, { abortEarly: false });
+            if (selectedAutionId) {
+                try {
+                    // show loading
+                    submitBtn.disabled = true;
+                    btnText.textContent = "Bidding...";
+                    btnLoader.classList.remove("hidden");
+
+                    formData = { amount: parseFloat(formData.amount), auctionId: selectedAutionId };
+
+                    const res = await fetch('/bids', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData),
+                    });
+
+                    const data = await res.json();
+
+                    if (!data.success) {
+                        document.getElementById("result").innerHTML = errorMessage(data.message);
+                    } else {
+                        document.getElementById("result").innerHTML = successMessage(data.message);
+                        document.getElementById("bidForm").reset();
+                        setTimeout(() => {
+                            modal.classList.add("hidden");
+                        }, 300);
+                    }
+                } catch (err) {
+                    document.getElementById("result").innerHTML = errorMessage('An error occurred while placing a bid');
+                } finally {
+                    // hide loading
+                    submitBtn.disabled = false;
+                    btnText.textContent = "Bid";
+                    btnLoader.classList.add("hidden");
+                }
+
+            }
+        } catch (err) {
+            // Clear previous errors
+            document.querySelectorAll(".error").forEach(el => el.innerText = "");
+            document.querySelectorAll("input, textarea").forEach(input => input.classList.remove("border-red-400", "border-green-500"));
+
+            // Show new errors
+            err.inner.forEach((validationError) => {
+                const field = validationError.path;
+                document.getElementById(field).classList.add("border-red-400");
+                document.getElementById(`${field}Error`).innerText = validationError.message;
+            });
+        }
+    });
+    function errorMessage(message) {
+        return `<div class="mb-4 rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-800" role="alert">
+                <span class="font-semibold">${message}</span>
+            </div>`;
+    }
+    function successMessage(message) {
+        return `<div class="mb-4 rounded-lg border border-green-300 bg-green-50 p-4 text-sm text-green-800" role="alert">
+                <span class="font-semibold">${message}</span>
+            </div>`;
+    }
+</script>

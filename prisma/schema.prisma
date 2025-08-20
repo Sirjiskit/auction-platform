@@ -15,15 +15,17 @@ datasource db {
 }
 
 model User {
-  id      String @id @default(uuid())
-  email   String @unique
-  name    String
-  address String
+  id       String @id @default(uuid())
+  email    String @unique
+  name     String
+  address  String
+  password String
 
   createdAt DateTime  @default(now())
   // relations
   auctions  Auction[] @relation("UserAuctions")
   bids      Bid[]     @relation("UserBids")
+  winners   Auction[] @relation("UserAuctionsWinner")
 }
 
 model Auction {
@@ -32,11 +34,14 @@ model Auction {
   description String?
   endsAt      DateTime
   createdAt   DateTime @default(now())
+  closed      Boolean  @default(false)
 
   // relations
-  ownerId String
-  owner   User   @relation("UserAuctions", fields: [ownerId], references: [id])
-  bids    Bid[]  @relation("AuctionBids")
+  ownerId  String
+  winnerId String?
+  owner    User    @relation("UserAuctions", fields: [ownerId], references: [id])
+  winner   User?   @relation("UserAuctionsWinner", fields: [winnerId], references: [id])
+  bids     Bid[]   @relation("AuctionBids")
 }
 
 model Bid {
