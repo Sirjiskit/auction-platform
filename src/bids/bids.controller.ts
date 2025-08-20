@@ -19,15 +19,15 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '../guard/auth.guard';
 import { BidsService } from './bids.service';
-import express from 'express';
 import { PlaceBidDto } from '../dto/bid.dto';
+import type { Request } from 'express';
 @UseGuards(AuthGuard)
 @Controller('bids')
 export class BidsController {
   constructor(private readonly bids: BidsService) {}
   @Get()
   @Render('bids')
-  async getBids(@Req() req: express.Request) {
+  async getBids(@Req() req: Request) {
     if (!req.session.user) {
       return new UnauthorizedException();
     }
@@ -44,7 +44,7 @@ export class BidsController {
     };
   }
   @Post()
-  async placeBid(@Body() dto: PlaceBidDto, @Req() req: express.Request) {
+  async placeBid(@Body() dto: PlaceBidDto, @Req() req: Request) {
     try {
       if (!req.session?.user) {
         throw new UnauthorizedException();
@@ -77,7 +77,7 @@ export class BidsController {
   }
   @Get('result')
   @Render('result')
-  async getResult(@Req() req: express.Request) {
+  async getResult(@Req() req: Request) {
     if (!req.session.user) {
       return new UnauthorizedException();
     }

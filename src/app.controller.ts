@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthGuard } from './guard/auth.guard';
-import express from 'express';
+import type { Request, Response } from 'express';
 
 @UseGuards(AuthGuard)
 @Controller()
@@ -19,7 +19,7 @@ export class AppController {
 
   @Get()
   @Render('index')
-  async getDashboard(@Req() req: express.Request) {
+  async getDashboard(@Req() req: Request) {
     if (!req.session.user) {
       return new UnauthorizedException();
     }
@@ -36,7 +36,7 @@ export class AppController {
     };
   }
   @Post('logout')
-  logout(@Req() req: express.Request, @Res() res: express.Response) {
+  logout(@Req() req: Request, @Res() res: Response) {
     req.session.user = undefined;
     return res.redirect('/auth/login');
   }

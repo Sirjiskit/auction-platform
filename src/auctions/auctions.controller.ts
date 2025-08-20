@@ -18,16 +18,16 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '../guard/auth.guard';
 import { ValidationExceptionFilter } from 'src/exceptions/validation-exception.filter';
-import express from 'express';
 import { CreateAuctionDto } from '../dto/aution.dto';
 import { AuctionsService } from './auctions.service';
+import type { Request, Response } from 'express';
 @UseGuards(AuthGuard)
 @Controller('auctions')
 export class AuctionsController {
   constructor(private readonly aution: AuctionsService) {}
   @Get()
   @Render('auction')
-  async getAuctions(@Req() req: express.Request) {
+  async getAuctions(@Req() req: Request) {
     if (!req.session.user) {
       return new UnauthorizedException();
     }
@@ -47,8 +47,8 @@ export class AuctionsController {
   @UseFilters(ValidationExceptionFilter)
   async postAuctions(
     @Body() dto: CreateAuctionDto,
-    @Res() res: express.Response,
-    @Req() req: express.Request,
+    @Res() res: Response,
+    @Req() req: Request,
   ) {
     try {
       if (!req.session.user) {

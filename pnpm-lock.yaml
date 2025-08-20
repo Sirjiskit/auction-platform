@@ -56,6 +56,9 @@ importers:
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1
+      express:
+        specifier: ^5.1.0
+        version: 5.1.0
       express-handlebars:
         specifier: ^8.0.3
         version: 8.0.3
